@@ -1,0 +1,54 @@
+version: '3.4'
+
+services:
+  implementandohealthcheckapi:
+    image: fabricioveronez/implementandohealthcheckapi
+    container_name: webapi
+    build:
+      context: .
+      dockerfile: ImplementandoHealthcheck.Api/Dockerfile
+    ports:
+      - "8080:80"
+    depends_on:
+      - mysql
+    networks:
+      - healthcheck
+
+  mysql:
+    image: mariadb
+    container_name: mysql
+    ports:
+      - "3306:3306"
+    networks:
+      - healthcheck
+    environment:
+      MYSQL_ROOT_PASSWORD: rtg%6548
+      MYSQL_DATABASE: healthcheck
+      MYSQL_USER: healthcheckuser
+      MYSQL_PASSWORD: healthcheckpws
+
+  prometheus:
+    image: prom/prometheus
+    container_name: prometheus
+    volumes: 
+      - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
+    ports:
+      - "9090:9090"
+    depends_on:
+      - implementandohealthcheckapi
+    networks:
+      - healthcheck
+
+  grafana:
+    image: grafana/grafana:5.3.2 
+    container_name: grafana
+    ports:
+      - "3000:3000"
+    depends_on:
+      - prometheus
+    networks:
+      - healthcheck
+
+networks:
+  healthcheck:
+    driver: bridge
