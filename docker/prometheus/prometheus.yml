@@ -14,4 +14,4 @@ scrape_configs:
     scrape_interval: 5s   
 
     static_configs:
-      - targets: ['webapi:80'] #change this to your hostname, defaults to '/metrics'
+      - targets: ['webapi1:80', 'webapi2:80', 'webapi3:80'] #change this to your hostname, defaults to '/metrics'

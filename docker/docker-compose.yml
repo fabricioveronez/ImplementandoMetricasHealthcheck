@@ -1,0 +1,81 @@
+version: '3.4'
+
+services:
+
+  proxy:
+    image: nginx
+    ports:
+      - "8080:80"
+    depends_on:
+      - implementandohealthcheckapi1
+      - implementandohealthcheckapi2
+      - implementandohealthcheckapi3
+    networks:
+      - healthcheck
+    volumes: 
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf
+
+  implementandohealthcheckapi1:
+    image: fabricioveronez/healthcheck-api:latest
+    container_name: webapi1    
+    depends_on:
+      - mysql
+    networks:
+      - healthcheck
+
+  implementandohealthcheckapi2:
+    image: fabricioveronez/healthcheck-api:latest
+    container_name: webapi2    
+    depends_on:
+      - mysql
+    networks:
+      - healthcheck
+
+  implementandohealthcheckapi3:
+    image: fabricioveronez/healthcheck-api:latest
+    container_name: webapi3    
+    depends_on:
+      - mysql
+    networks:
+      - healthcheck
+
+  mysql:
+    image: mariadb
+    container_name: mysql
+    ports:
+      - "3306:3306"
+    networks:
+      - healthcheck
+    environment:
+      MYSQL_ROOT_PASSWORD: rtg%6548
+      MYSQL_DATABASE: healthcheck
+      MYSQL_USER: healthcheckuser
+      MYSQL_PASSWORD: healthcheckpws
+
+  prometheus:
+    image: prom/prometheus
+    container_name: prometheus
+    volumes: 
+      - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
+    ports:
+      - "9090:9090"
+    depends_on:
+      - implementandohealthcheckapi1
+      - implementandohealthcheckapi2
+      - implementandohealthcheckapi3
+    networks:
+      - healthcheck
+
+  grafana:
+    image: grafana/grafana:5.3.2 
+    container_name: grafana
+    ports:
+      - "3000:3000"
+    depends_on:
+      - prometheus
+    networks:
+      - healthcheck
+
+networks:
+  healthcheck:
+    driver: bridge

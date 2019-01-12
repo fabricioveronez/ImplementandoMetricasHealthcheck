@@ -11,7 +11,7 @@ namespace ImplementandoHealthcheck.Carga
             HttpClient cliente = new HttpClient();
             cliente.BaseAddress = new Uri("http://localhost:8080/api");
 
-            for (int i = 0; i < 2000; i++)
+            for (int i = 0; i < 5000; i++)
             {
                 var resGetAll = cliente.GetStringAsync("http://localhost:8080/api/produto").Result;
                 var resGetOne = cliente.GetStringAsync("http://localhost:8080/api/produto/1").Result;

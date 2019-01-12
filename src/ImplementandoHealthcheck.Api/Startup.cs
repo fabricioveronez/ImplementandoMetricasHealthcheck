@@ -46,6 +46,9 @@ namespace ImplementandoHealthcheck.Api
             .HealthChecks.AddHttpGetCheck("GitHub", new Uri("https://github.com"), TimeSpan.FromSeconds(10))
             .BuildAndAddTo(services);
 
+            services.AddMetricsReportingHostedService();
+            services.AddHealthReportingHostedService();
+
             services.AddHealth(health);
 
             services.AddMetricsEndpoints();
