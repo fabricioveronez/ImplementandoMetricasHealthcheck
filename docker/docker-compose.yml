@@ -67,7 +67,10 @@ services:
       - healthcheck
 
   grafana:
-    image: grafana/grafana:5.3.2 
+    image: fabricioveronez/grafana-appmetrics #grafana/grafana:5.3.2
+    build:
+      context: .
+      dockerfile: grafana/Dockerfile     
     container_name: grafana
     ports:
       - "3000:3000"
