@@ -32,7 +32,7 @@ namespace ImplementandoHealthcheck.Api
                                         options.AddEnvTag();
                                         options.AddAppTag();
                                     })
-                                .OutputMetrics.AsPrometheusPlainText()                                                                
+                                .OutputMetrics.AsPrometheusPlainText()
                                 .Build();
 
             services.AddMetrics(metrics);
@@ -44,6 +44,7 @@ namespace ImplementandoHealthcheck.Api
                                           TimeSpan.FromMinutes(1))
             .HealthChecks.AddPingCheck("Google Ping", "google.com", TimeSpan.FromSeconds(10))
             .HealthChecks.AddHttpGetCheck("GitHub", new Uri("https://github.com"), TimeSpan.FromSeconds(10))
+            .HealthChecks.RegisterFromAssembly(services)
             .BuildAndAddTo(services);
 
             services.AddMetricsReportingHostedService();

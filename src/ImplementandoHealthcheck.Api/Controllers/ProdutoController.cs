@@ -5,6 +5,8 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using ImplementandoHealthcheck.Api.Models;
 using System.Threading;
+using App.Metrics;
+using App.Metrics.Timer;
 
 namespace ImplementandoHealthcheck.Api.Controllers
 {
@@ -27,7 +29,24 @@ namespace ImplementandoHealthcheck.Api.Controllers
 
         // POST api/produtos
         [HttpPost("")]
-        public void Post([FromBody] Produto produto) { }
+        public void Post([FromBody] Produto produto, [FromServices] IMetrics metrics) 
+        {
+            Random random = new Random();
+            
+            TimerOptions requestTimer = new TimerOptions()
+            {
+                Name = "teste metricas",
+                MeasurementUnit = Unit.Requests,
+                DurationUnit = TimeUnit.Milliseconds,
+                RateUnit = TimeUnit.Milliseconds
+            };
+            
+            using(metrics.Measure.Timer.Time(requestTimer))
+            {
+                Thread.Sleep(random.Next(10) * 1000);
+            }
+        
+        }
 
         // PUT api/produtos/5
         [HttpPut("{id}")]
