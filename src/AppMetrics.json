@@ -3,7 +3,6 @@
     {
       "name": "DS_METRICAS",
       "label": "metricas",
-      "value": "metricas",
       "description": "",
       "type": "datasource",
       "pluginId": "prometheus",
@@ -2962,7 +2961,6 @@
       {
         "allValue": null,
         "current": {},
-        "datasource": "metricas",
         "hide": 0,
         "includeAll": false,
         "label": null,

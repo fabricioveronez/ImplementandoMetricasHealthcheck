@@ -1,10 +1,10 @@
-FROM microsoft/dotnet:2.1-aspnetcore-runtime AS base
+FROM microsoft/dotnet:2.2-aspnetcore-runtime AS base
 CMD apt-get update && apt-get install ps 
 CMD apt-get update && apt-get install kill 
 WORKDIR /app
 EXPOSE 80
 
-FROM microsoft/dotnet:2.1-sdk AS build
+FROM microsoft/dotnet:2.2-sdk AS build
 WORKDIR /src
 COPY ImplementandoHealthcheck.Api/ImplementandoHealthcheck.Api.csproj ImplementandoHealthcheck.Api/
 RUN dotnet restore ImplementandoHealthcheck.Api/ImplementandoHealthcheck.Api.csproj
